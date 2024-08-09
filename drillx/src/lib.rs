@@ -1,16 +1,19 @@
-// Include necessary imports
-use sha3::{Digest, Keccak256};  // Ensure Digest trait and Keccak256 are imported
-use equix;
+// Define the `equix` module and make it public
+pub mod equix {
+    // Re-export everything from `equix` to make it accessible
+    pub use equix::*;
+}
 
-// Other existing code...
+// Import necessary items
+use sha3::Keccak256;  // Import Keccak256 only
+use equix::SolverMemory;  // Import SolverMemory from the public `equix` module
 
-#[cfg(not(feature = "solana"))]
-use sha3::Keccak256;  // Remove this line if the above line is included
+// Other code...
 
 /// Generates a new drillx hash from a challenge and nonce.
 #[inline(always)]
 pub fn hash(challenge: &[u8; 32], nonce: &[u8; 8]) -> Result<Hash, DrillxError> {
-    let mut memory = equix::SolverMemory::default();
+    let mut memory = SolverMemory::default();  // Use SolverMemory from the public module
     let digest = digest_with_memory(&mut memory, challenge, nonce)?;
     Ok(Hash {
         d: digest,
@@ -21,7 +24,7 @@ pub fn hash(challenge: &[u8; 32], nonce: &[u8; 8]) -> Result<Hash, DrillxError> 
 /// Generates a new drillx hash from a challenge and nonce using pre-allocated memory.
 #[inline(always)]
 pub fn hash_with_memory(
-    memory: &mut equix::SolverMemory,
+    memory: &mut SolverMemory,
     challenge: &[u8; 32],
     nonce: &[u8; 8],
 ) -> Result<Hash, DrillxError> {
@@ -44,7 +47,7 @@ pub fn seed(challenge: &[u8; 32], nonce: &[u8; 8]) -> [u8; 40] {
 /// Constructs a keccak digest from a challenge and nonce using equix hashes and pre-allocated memory.
 #[inline(always)]
 fn digest_with_memory(
-    memory: &mut equix::SolverMemory,
+    memory: &mut SolverMemory,
     challenge: &[u8; 32],
     nonce: &[u8; 8],
 ) -> Result<[u8; 16], DrillxError> {

@@ -1,10 +1,11 @@
+use drillx::equix::SolverMemory;  // Access `SolverMemory` from `drillx`
 use std::time::Instant;
 
 const TEST_SIZE: u64 = 1000;
 
 fn main() {
     println!("Benchmarking...");
-    let mut memory = drillx::equix::SolverMemory::new();
+    let mut memory = SolverMemory::new();  // Use `SolverMemory` here
     let challenge = [255; 32];
     let timer = Instant::now();
     for nonce in 0..TEST_SIZE {
