@@ -1,9 +1,11 @@
 // Include necessary imports
-use sha3::{Digest, Keccak256};  // Ensure Digest trait is imported
+use sha3::{Digest, Keccak256};  // Ensure Digest trait and Keccak256 are imported
 use equix;
 
+// Other existing code...
+
 #[cfg(not(feature = "solana"))]
-use sha3::Keccak256;
+use sha3::Keccak256;  // Remove this line if the above line is included
 
 /// Generates a new drillx hash from a challenge and nonce.
 #[inline(always)]
