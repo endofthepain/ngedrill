@@ -1,12 +1,13 @@
-// Define the `equix` module and make it public
 pub mod equix {
     // Re-export everything from `equix` to make it accessible
     pub use equix::*;
 }
 
-// Import necessary items
-use sha3::Keccak256;  // Import Keccak256 only
-use equix::SolverMemory;  // Import SolverMemory from the public `equix` module
+// Import the Keccak256 struct and Digest trait
+use sha3::{Digest, Keccak256};
+
+// Import SolverMemory from the public `equix` module
+use equix::SolverMemory;
 
 // Other code...
 
@@ -88,10 +89,10 @@ fn hashv(digest: &[u8; 16], nonce: &[u8; 8]) -> [u8; 32] {
 #[cfg(not(feature = "solana"))]
 #[inline(always)]
 fn hashv(digest: &[u8; 16], nonce: &[u8; 8]) -> [u8; 32] {
-    let mut hasher = Keccak256::new();
-    hasher.update(&sorted(*digest));
-    hasher.update(nonce);
-    hasher.finalize().into()
+    let mut hasher = Keccak256::new();  // Create a new Keccak256 instance
+    hasher.update(&sorted(*digest));    // Update the hasher with sorted digest
+    hasher.update(nonce);              // Update the hasher with nonce
+    hasher.finalize().into()           // Finalize the hash and convert it to a [u8; 32]
 }
 
 /// Returns true if the digest is a valid equihash construction from the challenge and nonce.
